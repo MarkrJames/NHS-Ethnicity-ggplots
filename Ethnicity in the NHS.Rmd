@@ -7,9 +7,9 @@ output: slidy_presentation
 
 ```{r setup, include=FALSE, warning=FALSE}
 
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = FALSE,
+                      fig.width = 14, fig.height = 8)
 
-knitr::opts_chunk$set(fig.width = 14, fig.height = 8) 
  
 library(dplyr)
 library(tidyr)
@@ -44,8 +44,7 @@ Ethnicity_df <- data.frame(
 # Change data frame into narrow format to enable use in ggplot
 Narrow_Ethnicity_df <- gather(data = Ethnicity_df, 
                               key = Ethnicity, 
-                              value = Percentage, 
-                              -Measure, -Total
+                              value = Percentage, -Measure, -Total
                               )
 
 # Set columns to factors and  set desired order (levels)
@@ -83,16 +82,16 @@ base_plot <- ggplot(Narrow_Ethnicity_df, aes(x = Measure, y = Percentage,  fill 
 
 ## Original
 
-```{r, out.width = "80%"}
+```{r orig_image, out.width = "80%"}
 
 # Load orginal image
-knitr::include_graphics("C:\\Users\\mrmar\\Desktop\\R Projects\\NHS_Ethnicity\\Untitled.png")
+knitr::include_graphics("./Orig-Ethnicity-in-the-NHS.png")
 
 ```
 
 ## Stacked Column Chart
 
-```{r side, warning=FALSE}
+```{r 01_stacked, warning=FALSE}
 
 stack_plot <- base_plot +
   geom_col(position = position_stack(reverse = TRUE)) +
@@ -104,7 +103,7 @@ plot(stack_plot)
 
 ## Area Chart
 
-```{r area, warning= FALSE}
+```{r 02_area, warning=FALSE}
 
 area_plot <- ggplot(Narrow_Ethnicity_df, aes(x = Measure, y = Percentage)) + 
   geom_area(aes(colour = Ethnicity, group = Ethnicity, fill = Ethnicity),
@@ -120,7 +119,7 @@ plot(area_plot)
 
 ## Stacked Column Chart - Rotated with Labels
 
-```{r sidelabel,warning= FALSE,message=FALSE }
+```{r 03_stacked_horiz, warning=FALSE, message=FALSE }
 
 Horiz_stack_plot <- stack_plot +
   coord_flip() +
@@ -140,7 +139,7 @@ plot(Horiz_stack_plot)
 
 ## Column Chart - Grouped by Ethnicity
 
-```{r facet_vertical, warning=FALSE}
+```{r 04_facet_vertical, warning=FALSE}
 
 facet_vertical <- base_plot +
   geom_col(position = position_stack(reverse = TRUE)) +
@@ -154,10 +153,9 @@ plot(facet_vertical)
 
 ```
 
-
 ## Column Chart - Grouped by Ethnicity, Rotated with Labels
 
-```{r facet_horizontal, warning=FALSE}
+```{r 05_facet_horizontal, warning=FALSE}
 
 facet_horizontal <- stack_plot +
   coord_flip() +
@@ -181,7 +179,7 @@ plot(facet_horizontal)
 
 ## Treemap
 
-```{r Treemap, warning=FALSE}
+```{r 06_treemap, warning=FALSE}
 
 treemap_plot <- ggplot(Narrow_Ethnicity_df, aes(area = Percentage, fill = Ethnicity, label = Percentage)) +
   geom_treemap() +
@@ -194,7 +192,7 @@ plot(treemap_plot)
 
 ## Waffle Chart - Pictogram
 
-```{r waffle_picto, message=FALSE, warning=FALSE}
+```{r 07_waffle_picto, message=FALSE, warning=FALSE}
 
 # Create new dataframe that removes Total and Measure columns
 Ethnicity_waffle_df <- Ethnicity_df %>% 
@@ -257,10 +255,9 @@ iron(f, g, h, i ,j)
 
 ```
 
-
 ## Waffle Chart
 
-```{r waffle_square, message=FALSE, warning=FALSE}
+```{r 08_waffle_square, message=FALSE, warning=FALSE}
 
 a <- waffle(Ethnicity_waffle_df[1,], rows = 4, legend_pos = "top", size = 0, colors = col_pal_cmyk) +
   ggtitle(Ethnicity_df[1,]$Measure) +
